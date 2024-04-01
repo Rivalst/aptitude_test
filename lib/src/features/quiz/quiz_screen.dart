@@ -33,7 +33,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
           leading: null,
           titleSpacing: 0,
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(6.0),
+            preferredSize: const Size.fromHeight(6.0),
             child: LinearTimer(
               duration: Duration(seconds: _time),
               controller: timerLinearController,
