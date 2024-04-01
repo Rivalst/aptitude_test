@@ -13,7 +13,7 @@ class QuizCard extends StatefulWidget {
     required bool isLast,
   }) buttonNextPressed;
 
-  final Function(bool isReset) updateTime;
+  final Function() updateTime;
 
   const QuizCard({
     required this.quiz,
@@ -85,7 +85,6 @@ class _QuizCardState extends State<QuizCard> {
     _timer = Timer.periodic(oneSecond, (Timer timer) {
       if (widget.seconds <= 0) {
         timer.cancel();
-        widget.updateTime(true);
         if (widget.isLast) {
           widget.buttonNextPressed(
             score: _score,
@@ -98,7 +97,7 @@ class _QuizCardState extends State<QuizCard> {
           );
         }
       } else {
-        widget.updateTime(false);
+        widget.updateTime();
       }
     });
   }
