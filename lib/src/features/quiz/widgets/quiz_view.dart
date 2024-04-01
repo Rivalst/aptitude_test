@@ -8,7 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuizView extends StatefulWidget {
-  const QuizView({super.key});
+  final Function(bool isReset) updateTime;
+  final int seconds;
+
+  const QuizView({
+    required this.updateTime,
+    required this.seconds,
+    super.key,
+  });
 
   @override
   State<QuizView> createState() => _QuizViewState();
@@ -44,10 +51,12 @@ class _QuizViewState extends State<QuizView> {
               Expanded(
                 child: QuizCard(
                   quiz: _quizzes[index],
+                  seconds: widget.seconds,
+                  updateTime: widget.updateTime,
                   buttonNextPressed: _buttonNextPressed,
                   isLast: index == _quizzes.length - 1,
                 ),
-              )
+              ),
             ],
           ),
         );

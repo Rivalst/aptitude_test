@@ -1,19 +1,26 @@
+import 'dart:async';
+
 import 'package:aptitude_test/src/features/app/model/quiz_model/quiz_model.dart';
 import 'package:flutter/material.dart';
 
 class QuizCard extends StatefulWidget {
   final Quiz quiz;
   final bool isLast;
+  final int seconds;
 
   final Function({
     required int score,
     required bool isLast,
   }) buttonNextPressed;
 
+  final Function(bool isReset) updateTime;
+
   const QuizCard({
     required this.quiz,
     required this.buttonNextPressed,
     required this.isLast,
+    required this.seconds,
+    required this.updateTime,
     super.key,
   });
 
@@ -22,6 +29,20 @@ class QuizCard extends StatefulWidget {
 }
 
 class _QuizCardState extends State<QuizCard> {
+  late Timer? _timer;
+
+  @override
+  void initState() {
+    _startCountdown();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -56,6 +77,23 @@ class _QuizCardState extends State<QuizCard> {
     setState(() {
       _isSelectedAnswer = true;
       _score = score;
+    });
+  }
+
+  void _startCountdown() {
+    const oneSecond = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSecond, (Timer timer) {
+      if (widget.seconds <= 0) {
+        timer.cancel();
+        widget.updateTime(true);
+        if (widget.isLast) {
+          widget.buttonNextPressed(score: 0, isLast: widget.isLast);
+        } else {
+          widget.buttonNextPressed(score: 0, isLast: widget.isLast);
+        }
+      } else {
+        widget.updateTime(false);
+      }
     });
   }
 
@@ -186,11 +224,11 @@ class _AnswerButton extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor:
-                isSelected ? Colors.deepPurple.withOpacity(0.2) : Colors.white,
+                isSelected ? Colors.deepPurple.withOpacity(0.15) : Colors.white,
             surfaceTintColor:
-                isSelected ? Colors.deepPurple.withOpacity(0.2) : Colors.white,
+                isSelected ? Colors.deepPurple.withOpacity(0.15) : Colors.white,
             shadowColor:
-                isSelected ? Colors.deepPurple.withOpacity(0.2) : Colors.white,
+                isSelected ? Colors.deepPurple.withOpacity(0.15) : Colors.white,
             side: BorderSide(
                 color: isSelected ? Colors.black : Colors.grey,
                 width: isSelected ? 1.5 : 1.0),
@@ -209,7 +247,7 @@ class _AnswerButton extends StatelessWidget {
                     answer,
                     softWrap: true,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 16.0,
                       color: Colors.black,
                     ),
