@@ -8,7 +8,7 @@ part of 'quiz_option_model.dart';
 
 _$QuizAnswerImpl _$$QuizAnswerImplFromJson(Map<String, dynamic> json) =>
     _$QuizAnswerImpl(
-      answer: json['answer'] as String,
+      answer: json['text'] as String,
       score: json['score'] as int,
     );
 

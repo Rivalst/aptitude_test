@@ -11,5 +11,5 @@ class Quiz with _$Quiz {
     required List<QuizAnswer> answers,
   }) = _Quiz;
 
-  factory Quiz.fromJson(Map<String, Object?> json) => _$QuizFromJson(json);
+  factory Quiz.fromJson(Map<String, dynamic> json) => _$QuizFromJson(json);
 }
