@@ -3,6 +3,7 @@ import 'package:aptitude_test/src/features/quiz/bloc/quiz_score_bloc.dart';
 import 'package:aptitude_test/src/features/quiz/widgets/quiz_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linear_timer/linear_timer.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -11,7 +12,16 @@ class QuizScreen extends StatefulWidget {
   State<QuizScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
+class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
+  late LinearTimerController timerLinearController =
+      LinearTimerController(this);
+
+  @override
+  void dispose() {
+    timerLinearController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -21,6 +31,13 @@ class _QuizScreenState extends State<QuizScreen> {
         appBar: AppBar(
           leading: null,
           titleSpacing: 0,
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(6.0),
+            child: LinearTimer(
+              duration: Duration(seconds: _time),
+              controller: timerLinearController,
+            ),
+          ),
           title: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 28.0),
             child: Row(
@@ -111,10 +128,13 @@ class _QuizScreenState extends State<QuizScreen> {
       setState(() {
         _time = 10;
       });
+      timerLinearController.reset();
+      timerLinearController.start();
     } else {
       setState(() {
         _time--;
       });
+      timerLinearController.start();
     }
   }
 
