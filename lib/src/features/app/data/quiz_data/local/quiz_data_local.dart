@@ -40,12 +40,11 @@ class QuizDataLocalProviderImpl implements QuizDataProvider {
 
   List<Quiz> _quizFromJson(List<Map<String, dynamic>> quizzes) {
     final List<Quiz> allQuizzes = [];
-    for (var quiz in _quizHelper.questions) {
+    for (var quiz in quizzes) {
       final quizFromJson = Quiz.fromJson(quiz);
       allQuizzes.add(quizFromJson);
     }
 
     return allQuizzes;
   }
-
 }
