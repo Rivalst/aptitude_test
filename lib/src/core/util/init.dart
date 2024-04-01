@@ -1,5 +1,8 @@
 import 'package:aptitude_test/src/core/util/dependencies.dart';
+import 'package:aptitude_test/src/core/util/helper.dart';
 import 'package:aptitude_test/src/core/util/logger.dart';
+import 'package:aptitude_test/src/features/app/data/quiz_data/local/quiz_data_local.dart';
+import 'package:aptitude_test/src/features/app/data/quiz_data/quiz_repository.dart';
 
 /// {@template initialization_processor}
 /// A class which is responsible for processing initialization steps.
@@ -9,9 +12,11 @@ final class InitializationProcessor {
   const InitializationProcessor();
 
   Future<Dependencies> _initDependencies() async {
+    final quizHelper = QuizHelperMysteryOfTiger();
+    final quizData = QuizDataLocalProviderImpl(quizHelper: quizHelper);
+    final quizRepository = QuizRepositoryImpl(quizDataProvider: quizData);
 
-
-    return Dependencies();
+    return Dependencies(quizRepository: quizRepository);
   }
 
   /// Method that starts the initialization process

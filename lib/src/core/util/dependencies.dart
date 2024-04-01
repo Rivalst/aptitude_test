@@ -1,9 +1,13 @@
+import 'package:aptitude_test/src/features/app/data/quiz_data/quiz_repository.dart';
+
 /// {@template dependencies}
 /// Dependencies container
 /// {@endtemplate}
 base class Dependencies {
+  final QuizRepository quizRepository;
+
   /// {@macro dependencies}
-  const Dependencies();
+  const Dependencies({required this.quizRepository});
 }
 
 /// {@template initialization_result}
