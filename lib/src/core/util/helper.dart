@@ -202,3 +202,7 @@ class QuizHelperMysteryOfTiger extends QuizHelper {
     },
   ];
 }
+
+// int
+
+const timerStandardSeconds = 120;

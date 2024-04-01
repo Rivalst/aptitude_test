@@ -1,4 +1,5 @@
 import 'package:aptitude_test/src/core/util/extensions.dart';
+import 'package:aptitude_test/src/core/util/helper.dart';
 import 'package:aptitude_test/src/features/quiz/bloc/quiz_score_bloc.dart';
 import 'package:aptitude_test/src/features/quiz/widgets/quiz_view.dart';
 import 'package:flutter/material.dart';
@@ -126,7 +127,7 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
   void _updateTime(bool isReset) {
     if (isReset) {
       setState(() {
-        _time = 10;
+        _time = timerStandardSeconds;
       });
       timerLinearController.reset();
       timerLinearController.start();
@@ -138,5 +139,5 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     }
   }
 
-  int _time = 10;
+  int _time = timerStandardSeconds;
 }

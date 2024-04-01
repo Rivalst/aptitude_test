@@ -87,9 +87,15 @@ class _QuizCardState extends State<QuizCard> {
         timer.cancel();
         widget.updateTime(true);
         if (widget.isLast) {
-          widget.buttonNextPressed(score: 0, isLast: widget.isLast);
+          widget.buttonNextPressed(
+            score: _score,
+            isLast: widget.isLast,
+          );
         } else {
-          widget.buttonNextPressed(score: 0, isLast: widget.isLast);
+          widget.buttonNextPressed(
+            score: _score,
+            isLast: widget.isLast,
+          );
         }
       } else {
         widget.updateTime(false);
