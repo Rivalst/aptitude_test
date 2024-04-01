@@ -1,7 +1,9 @@
 import 'package:aptitude_test/src/features/app/bloc/quiz_bloc.dart';
 import 'package:aptitude_test/src/features/app/model/quiz_model/quiz_model.dart';
+import 'package:aptitude_test/src/features/quiz/bloc/quiz_score_bloc.dart';
 import 'package:aptitude_test/src/features/quiz/widgets/quiz_card.dart';
 import 'package:aptitude_test/src/features/quiz/widgets/quiz_count.dart';
+import 'package:aptitude_test/src/features/result/result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,6 +45,7 @@ class _QuizViewState extends State<QuizView> {
                 child: QuizCard(
                   quiz: _quizzes[index],
                   buttonNextPressed: _buttonNextPressed,
+                  isLast: index == _quizzes.length - 1,
                 ),
               )
             ],
@@ -53,16 +56,30 @@ class _QuizViewState extends State<QuizView> {
   }
 
   void _buttonNextPressed({
-    required BuildContext context,
     required int score,
     required bool isLast,
   }) {
+    final scoreBloc = context.read<QuizScoreBloc>();
+
+    scoreBloc.add(
+      QuizScoreEvent.increment(
+        score: score,
+      ),
+    );
+
     if (isLast) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => ResultScreen(
+            score: scoreBloc.state.score,
+          ),
+        ),
+      );
       return;
     }
 
     _controller.nextPage(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 150),
       curve: Curves.linear,
     );
   }

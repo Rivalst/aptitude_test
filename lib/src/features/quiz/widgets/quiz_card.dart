@@ -1,10 +1,11 @@
 import 'package:aptitude_test/src/features/app/model/quiz_model/quiz_model.dart';
 import 'package:flutter/material.dart';
 
-class QuizCard extends StatelessWidget {
+class QuizCard extends StatefulWidget {
   final Quiz quiz;
+  final bool isLast;
+
   final Function({
-    required BuildContext context,
     required int score,
     required bool isLast,
   }) buttonNextPressed;
@@ -12,9 +13,15 @@ class QuizCard extends StatelessWidget {
   const QuizCard({
     required this.quiz,
     required this.buttonNextPressed,
+    required this.isLast,
     super.key,
   });
 
+  @override
+  State<QuizCard> createState() => _QuizCardState();
+}
+
+class _QuizCardState extends State<QuizCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,28 +30,46 @@ class QuizCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            quiz.questionText,
+            widget.quiz.questionText,
             style: const TextStyle(
                 color: Colors.black,
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold),
           ),
           _Buttons(
-            quiz: quiz,
+            quiz: widget.quiz,
+            selectedAnswer: _selectedAnswer,
           ),
           const Spacer(),
-          _NextButton(buttonNextPressed: buttonNextPressed)
+          _NextButton(
+            buttonNextPressed: widget.buttonNextPressed,
+            isSelectedAnswer: _isSelectedAnswer,
+            score: _score,
+            isLast: widget.isLast,
+          )
         ],
       ),
     );
   }
+
+  void _selectedAnswer(int score) {
+    setState(() {
+      _isSelectedAnswer = true;
+      _score = score;
+    });
+  }
+
+  bool _isSelectedAnswer = false;
+  int _score = 0;
 }
 
 class _Buttons extends StatefulWidget {
   final Quiz quiz;
+  final Function(int) selectedAnswer;
 
   const _Buttons({
     required this.quiz,
+    required this.selectedAnswer,
   });
 
   @override
@@ -62,14 +87,16 @@ class _ButtonsState extends State<_Buttons> {
         children: widget.quiz.answers.map(
           (e) {
             return _AnswerButton(
-              answer: e.answer,
-              isSelected: e.answer == _selectedAnswer,
-              onPressed: () => setState(
-                () {
-                  _selectedAnswer = e.answer;
-                },
-              ),
-            );
+                answer: e.answer,
+                isSelected: e.answer == _selectedAnswer,
+                onPressed: () {
+                  widget.selectedAnswer(e.score);
+                  setState(
+                    () {
+                      _selectedAnswer = e.answer;
+                    },
+                  );
+                });
           },
         ).toList(),
       ),
@@ -79,12 +106,20 @@ class _ButtonsState extends State<_Buttons> {
 
 class _NextButton extends StatelessWidget {
   final Function({
-    required BuildContext context,
     required int score,
     required bool isLast,
   }) buttonNextPressed;
 
-  const _NextButton({required this.buttonNextPressed});
+  final bool isSelectedAnswer;
+  final int score;
+  final bool isLast;
+
+  const _NextButton({
+    required this.buttonNextPressed,
+    required this.isSelectedAnswer,
+    required this.score,
+    required this.isLast,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +127,16 @@ class _NextButton extends StatelessWidget {
       width: double.infinity,
       height: 60.0,
       child: ElevatedButton(
-        onPressed: () => buttonNextPressed(
-          context: context,
-          score: 0,
-          isLast: false,
-        ),
+        onPressed: isSelectedAnswer
+            ? () => buttonNextPressed(
+                  score: score,
+                  isLast: isLast,
+                )
+            : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(10.0),
           ),
         ),
         child: const Row(
@@ -149,15 +185,18 @@ class _AnswerButton extends StatelessWidget {
         child: ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.white,
-            shadowColor: Colors.white,
-            side: const BorderSide(
-              color: Colors.grey,
-            ),
+            backgroundColor:
+                isSelected ? Colors.deepPurple.withOpacity(0.2) : Colors.white,
+            surfaceTintColor:
+                isSelected ? Colors.deepPurple.withOpacity(0.2) : Colors.white,
+            shadowColor:
+                isSelected ? Colors.deepPurple.withOpacity(0.2) : Colors.white,
+            side: BorderSide(
+                color: isSelected ? Colors.black : Colors.grey,
+                width: isSelected ? 1.5 : 1.0),
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(10.0),
             ),
           ),
           child: Row(
@@ -171,6 +210,8 @@ class _AnswerButton extends StatelessWidget {
                     softWrap: true,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                      color: Colors.black,
                     ),
                   ),
                 ),
