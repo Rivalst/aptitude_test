@@ -23,7 +23,7 @@ class QuizzesState with _$QuizzesState {
         loaded: (quizzes) => quizzes,
         error: (
           quizzes,
-          _,
+          messages,
         ) =>
             quizzes,
       );
