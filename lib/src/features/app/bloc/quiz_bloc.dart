@@ -63,9 +63,9 @@ class QuizBloc extends Bloc<QuizzesEvent, QuizzesState> {
       emitter(const QuizzesState.loading());
       final randomQuizzes = await _quizRepository.getRandomAllQuizzes();
       // this is required to display the conditional loading indicator
-      await Future.delayed(
-        const Duration(seconds: 3),
-      );
+      // await Future.delayed(
+      //   const Duration(seconds: 1),
+      // );
       emitter(
         QuizzesState.loaded(randomQuizzes),
       );
