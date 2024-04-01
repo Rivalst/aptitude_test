@@ -124,19 +124,11 @@ class _QuizScreenState extends State<QuizScreen> with TickerProviderStateMixin {
     );
   }
 
-  void _updateTime(bool isReset) {
-    if (isReset) {
-      setState(() {
-        _time = timerStandardSeconds;
-      });
-      timerLinearController.reset();
-      timerLinearController.start();
-    } else {
-      setState(() {
-        _time--;
-      });
-      timerLinearController.start();
-    }
+  void _updateTime() {
+    setState(() {
+      _time--;
+    });
+    timerLinearController.start();
   }
 
   int _time = timerStandardSeconds;

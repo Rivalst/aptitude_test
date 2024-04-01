@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuizView extends StatefulWidget {
-  final Function(bool isReset) updateTime;
+  final Function() updateTime;
   final int seconds;
 
   const QuizView({
